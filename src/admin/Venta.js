@@ -7,7 +7,12 @@ function Ventas() {
   const [usuarios, setUsuarios] = useState([]);
   const [vendedorId, setVendedorId] = useState('');
   const [venta, setVentas] = useState([]);
+  const [productosVenta, setProductosVenta] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentVenta, setCurrentVenta] = useState(null);
   const [products, setproduct] = useState([]);
+  const [cantidad, setCantidad] = useState(0);
+  const [total, setTotal] = useState(0);
   const [clienteId, setClienteId] = useState('');
   const [montoPagado, setMontoPagado] = useState('');
   const [estadoPago, setEstadoPago] = useState('');
@@ -34,6 +39,18 @@ function Ventas() {
       console.error("Error fetching ventas:", error);
     });
   }, [personaService, setVentas, setUsuarios, setproduct]);
+
+  const handleEditVenta = (venta) => {
+    setIsEditing(true);
+    setCurrentVenta(venta);
+    setVendedorId(venta.vendedorId);
+    setClienteId(venta.clienteId);
+    setProductosVenta(JSON.parse(venta.productos));
+    setCantidad(venta.cantidad);
+    setTotal(venta.total);
+    setMontoPagado(venta.montoPagado);
+    setEstadoPago(venta.estadoPago);
+  };
 
   const handleRealizarVenta = async (e) => {
     e.preventDefault();
@@ -70,7 +87,14 @@ function Ventas() {
     } catch (error) {
       console.error('Error al realizar la venta:', error);
       // Aquí podrías manejar el error
-    }
+    } 
+    setVendedorId('');
+    setClienteId('');
+    setProductosVenta([]);
+    setCantidad(0);
+    setTotal(0);
+    setMontoPagado('');
+    setEstadoPago('');
   };
 
   const user = (vendedorId) =>{
@@ -96,6 +120,16 @@ function Ventas() {
     }
   };
 
+  const handleEliminar = async (ventaId) => {
+    try {
+      await axios.delete(`http://localhost:8081/ventas/${ventaId}`);
+      alert('Eliminado realizada con éxito.');
+    } catch (error) {
+      console.error('Error al realizar la devolución:', error);
+      alert('Error al realizar la eliminacion.');
+    }
+
+  };
   return (
     <div>
       <h2>Realizar Venta</h2>
@@ -192,7 +226,9 @@ function Ventas() {
                 <span>{venta.fecha}</span>
                 <span>{venta.estadoPago}</span>
                 <span>
-                  <button onClick={() => handleDevolucion(venta.id)} className="btn-devolucion">Devolución</button>
+                <button onClick={() => handleEditVenta(venta)} className='btn-edit'>Editar</button>
+                <button onClick={() => handleEliminar(venta.id)} className="btn-delete">Eliminar</button>
+                <button onClick={() => handleDevolucion(venta.id)} className="btn-devolucion">Devolución</button>
                 </span>
               </li>
             ))}

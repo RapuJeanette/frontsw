@@ -8,8 +8,8 @@ function Login() {
   const [user, setAllUsers] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [setErrorMessage] = useState('');
-  const [setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const personaService = new PersonaService();
@@ -17,7 +17,6 @@ function Login() {
   useEffect(() => {
     personaService.getUser().then(data =>  {
       setAllUsers(data);
-      console.log(data);
     }).catch(error => {
       console.error("Error fetching Usuarios:", error);
     });
@@ -30,11 +29,15 @@ function Login() {
     if (users) {
       login(users);
       setTimeout(() => {
-        navigate('admin/*'); // Navega a la página de inicio
+        if (users.role === 'Administrador') {
+          navigate('/admin'); // Navega a la página de administración
+        } else {
+          navigate('/recomendador'); // Navega a la página de cliente
+        } 
       }, 1000);
+      setSuccessMessage('¡Inicio de sesión exitoso!');
     } else {
       setErrorMessage('Correo electrónico o contraseña incorrectos');
-      setSuccessMessage('');
     }
   };
 
@@ -64,6 +67,7 @@ function Login() {
         </div>
         <button type="submit">Iniciar Sesión</button>
         <p className="signup-link">¿No tienes una cuenta? <Link to="/register">Regístrate</Link></p>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}     
       </form>
     </div>
   );

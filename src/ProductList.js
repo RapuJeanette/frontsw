@@ -36,6 +36,7 @@ function ProductList() {
               `$${product.precio}`
             )}
           </p>
+          <p>{product.descripcion}</p>
           <p>{product.categoria}</p>
           <p>Stock: {product.cantidad}</p>
           <button onClick={() => addToCart(product)}>Agregar al carrito</button>

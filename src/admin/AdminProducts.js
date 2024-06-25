@@ -5,9 +5,11 @@ import '../App.css';
 import axios from "axios";
 import { PersonaService } from '../PersonaAPI';
 
+
 function AdminProducts() {
-  const { products, addProduct, editProduct, deleteProduct, categories, setproduct, setAllCategories } = useContext(CartContext);
+  const { addProduct, editProduct, deleteProduct, categories, setproduct, setAllCategories } = useContext(CartContext);
   const [productName, setProductName] = useState('');
+  const { products } = useContext(CartContext);
   const [productPrice, setProductPrice] = useState('');
   const [productCategory, setProductCategory] = useState('');
   const [productStock, setProductStock] = useState('');
@@ -20,11 +22,10 @@ function AdminProducts() {
   useEffect(() => {
     personaService.getProducto().then(data => {
       setproduct(data);
-
     }).catch(error => {
       console.error("Error fetching categories:", error);
     });
-  }, [personaService, setproduct]);
+  }, [personaService]);
 
   useEffect(() => {
     personaService.getAll().then(data => {

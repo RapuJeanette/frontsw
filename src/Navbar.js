@@ -4,11 +4,10 @@ import './App.css';
 import { CartContext } from './CartContext';
 import { FaShoppingCart, FaUser, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import { AuthContext } from './AuthProvider';
-import { Recomendador } from './components/Recomendador'
 
 function Navbar() {
   const { cartCount, searchProducts } = useContext(CartContext);
-  const { token, logout } = useContext(AuthContext);
+  const { token, logout, userRole } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -35,7 +34,11 @@ function Navbar() {
           <Link to="/products">Productos</Link>
         </li>
         <li>
-          <Link to="/admin">Admin</Link>
+        { (token && userRole !== 'Cliente') && (
+          <li>
+            <Link to="/admin">Admin</Link>
+          </li>
+        )}
         </li>
         <li>
           <Link to="/accessories">Accesorios</Link>

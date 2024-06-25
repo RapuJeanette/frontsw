@@ -9,7 +9,7 @@ const initialPurchases = [];
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(initialCategories);
   const [users, setUsers] = useState(initialUsers);
   const [purchases, setPurchases] = useState(initialPurchases);
