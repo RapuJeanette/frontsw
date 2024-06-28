@@ -26,7 +26,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-brand">
         <h1>
-          <Link to="/" className="brand-link">Boutique</Link>
+          <Link to="/" className="brand-link">Regalo Inteligente</Link>
         </h1>
       </div>
       <ul className="navbar-links">
